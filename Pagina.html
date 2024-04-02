@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Ropa</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        
+        #productos {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .producto {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .producto img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loginPage">
+        
+        <h1>Tienda de Ropa</h1>
+        <h2>Login</h2>
+        <form action="/login" method="POST" onsubmit="return iniciarSesion()">
+            <label for="username">Usuario:</label>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <input type="submit" value="Iniciar Sesión">
+        </form>
+    </div>
+
+    <div id="tiendaPage" style="display: none;">
+        
+        <h1>Tienda de Ropa</h1>
+        <h2>Carrito de Compras</h2>
+        <ul id="cart">
+          
+        </ul>
+        <p>Total: <span id="total">0</span></p>
+
+        
+        <h2>Envío a Domicilio</h2>
+        <button onclick="mostrarFormularioDireccion()">Envío a Domicilio</button>
+        <div id="direccionForm" style="display: none;">
+            <h2>Ingrese su dirección</h2>
+            <form onsubmit="return confirmarDireccion()">
+                <label for="direccion">Dirección:</label><br>
+                <input type="text" id="direccion" name="direccion" required><br><br>
+
+                <label for="confirmarDireccion">Confirmar Dirección:</label><br>
+                <input type="text" id="confirmarDireccion" name="confirmarDireccion" required><br><br>
+
+                <input type="submit" value="Confirmar Dirección">
+            </form>
+        </div>
+
+      
+        <h2>Productos</h2>
+        <div id="productos">
+            <div class="producto">
+                <button onclick="agregarAlCarrito('Camiseta', 'camiseta.jpg', 20)">Agregar Camiseta</button>
+                <img src="camiseta.jpg" alt="Camiseta">
+            </div>
+            <div class="producto">
+                <button onclick="agregarAlCarrito('Pantalón', 'pantalon.jpg', 50)">Agregar Pantalón</button>
+                <img src="pantalon.jpg" alt="Pantalón">
+            </div>
+            <div class="producto">
+                <button onclick="agregarAlCarrito('Zapatos', 'zapatos.jpg', 80)">Agregar Zapatos</button>
+                <img src="zapatos.jpg" alt="Zapatos">
+            </div>
+        </div>
+
+        
+        <button onclick="irAPaginaConfirmacion()">Pagar</button>
+    </div>
+
+    <script>
+        let carrito = [];
+        let total = 0;
+
+        function iniciarSesion() {
+      
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('tiendaPage').style.display = 'block';
+            return false;
+        }
+
+        function agregarAlCarrito(articulo, imagen, precio) {
+            carrito.push({ articulo: articulo, imagen: imagen, precio: precio });
+            total += precio;
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            let cartList = document.getElementById('cart');
+            cartList.innerHTML = '';
+            carrito.forEach(item => {
+                let li = document.createElement('li');
+                let img = document.createElement('img');
+                img.src = item.imagen;
+                img.alt = item.articulo;
+                img.style.width = '50px';
+                li.appendChild(img);
+                li.appendChild(document.createTextNode(item.articulo + ' - $' + item.precio));
+                cartList.appendChild(li);
+            });
+            document.getElementById('total').textContent = total;
+        }
+
+        function mostrarFormularioDireccion() {
+            let direccionForm = document.getElementById('direccionForm');
+            direccionForm.style.display = 'block';
+        }
+
+        function irAPaginaConfirmacion() {
+            
+            let form = document.createElement('form');
+            form.action = 'confirmacion.html';
+            form.method = 'POST';
+
+            carrito.forEach(item => {
+                let inputArticulo = document.createElement('input');
+                inputArticulo.type = 'hidden';
+                inputArticulo.name = 'articulo[]';
+                inputArticulo.value = item.articulo;
+                form.appendChild(inputArticulo);
+
+                let inputPrecio = document.createElement('input');
+                inputPrecio.type = 'hidden';
+                inputPrecio.name = 'precio[]';
+                inputPrecio.value = item.precio;
+                form.appendChild(inputPrecio);
+            });
+
+            let inputTotal = document.createElement('input');
+            inputTotal.type = 'hidden';
+            inputTotal.name = 'total';
+            inputTotal.value = total;
+            form.appendChild(inputTotal);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function confirmarDireccion() {
+            let direccion = document.getElementById('direccion').value;
+            let confirmarDireccion = document.getElementById('confirmarDireccion').value;
+
+            if (direccion === confirmarDireccion) {                
+                irAPaginaConfirmacion();
+            } else {
+                alert('La dirección no coincide. Por favor, confirme su dirección correctamente.');
+            }
+
+            return false;
+        }
+    </script>
+</body>
+
+</html>
+

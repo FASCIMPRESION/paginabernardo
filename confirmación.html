@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Compra</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>Ticket de Compra</h1>
+    <ul id="cart">
+    </ul>
+    <p>Total: $<span id="total"></span></p>
+
+    <script>
+        let params = new URLSearchParams(window.location.search);
+        let articulos = params.getAll('articulo[]');
+        let precios = params.getAll('precio[]');
+        let total = parseFloat(params.get('total'));
+
+        let cartList = document.getElementById('cart');
+        let totalElement = document.getElementById('total');
+
+        articulos.forEach((articulo, index) => {
+            let li = document.createElement('li');
+            li.textContent = articulo + ' - $' + precios[index];
+            cartList.appendChild(li);
+        });
+
+        totalElement.textContent = total.toFixed(2);
+    </script>
+</body>
+
+</html>

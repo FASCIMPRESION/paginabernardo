@@ -1,0 +1,29 @@
+body {
+    font-family: 'Lora', serif;
+    background-image: url('fondo-tienda.jpg');
+    background-size: cover;
+}
+
+h1, h2, button {
+    font-family: 'Lora', serif;
+    color: #333;
+}
+
+#loginPage, #tiendaPage {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+#cart {
+    list-style-type: none;
+    padding: 0;
+}
+
+#cart img {
+    margin-right: 10px;
+    vertical-align: middle;
+}
